@@ -1,0 +1,10 @@
+bin/
+obj/
+node_modules/
+dist/
+*.user
+.vs/
+.vscode/
+*.log
+__pycache__/
+appsettings.*.local.json
