@@ -37,8 +37,12 @@ Yêu cầu: .NET SDK 9, Node.js 20+, SQL Server Express (hoặc LocalDB).
 
 **1. Backend** (cổng 5080)
 
+Lần đầu, đặt khóa JWT dev và mật khẩu tài khoản mẫu bằng user‑secrets (không lưu trong Git):
+
 ```bash
 cd backend/SweetMart.Api
+dotnet user-secrets set "Jwt:Key" "<chuỗi ngẫu nhiên tối thiểu 32 ký tự>"
+dotnet user-secrets set "Seed:DefaultPassword" "<mật khẩu cho tài khoản mẫu>"
 dotnet run --urls http://localhost:5080
 ```
 
@@ -59,8 +63,9 @@ Mở http://localhost:5173
 
 ```bash
 dotnet test                                   # tại thư mục SweetMart – 32 unit test
-PYTHONUTF8=1 python docs/cong-cu-tai-lieu/smoke.py backend/SweetMart.Api/appsettings.Development.json
+PYTHONUTF8=1 python docs/cong-cu-tai-lieu/smoke.py
                                               # kiểm thử tích hợp end-to-end, API phải đang chạy ở cổng 5080
+                                              # (mật khẩu mẫu lấy từ SEED_PASSWORD hoặc user-secrets)
 ```
 
 ### Tài khoản mẫu
@@ -72,7 +77,7 @@ PYTHONUTF8=1 python docs/cong-cu-tai-lieu/smoke.py backend/SweetMart.Api/appsett
 | `quanly@sweetmart.test` | Quản lý | + Sản phẩm, mã giảm giá, báo cáo doanh thu |
 | `quantri@sweetmart.test` | Quản trị | Quản lý tài khoản nhân viên |
 
-Mật khẩu: giá trị `Seed:DefaultPassword` trong `appsettings.Development.json` (hoặc `SEED_PASSWORD` trong `.env` khi chạy Docker).
+Mật khẩu: giá trị `Seed:DefaultPassword` đã đặt bằng user‑secrets (hoặc `SEED_PASSWORD` trong `.env` khi chạy Docker).
 Mã giảm giá mẫu: `CHAOBAN` (giảm 20.000 ₫ cho đơn từ 150.000 ₫), `TET2027` (giảm 10%, tối đa 100.000 ₫, đơn từ 300.000 ₫).
 
 ## Cấu hình khóa tích hợp

@@ -1,7 +1,18 @@
-import json, sys, time, urllib.request, urllib.error
+import json, os, pathlib, subprocess, sys, time, urllib.request, urllib.error
 B = 'http://localhost:5080'
-cfg = json.load(open(sys.argv[1], encoding='utf-8'))
-PW = cfg['Seed']['DefaultPassword']
+
+def mat_khau_mau():
+    """Mật khẩu tài khoản mẫu: biến môi trường SEED_PASSWORD, nếu không có thì đọc user-secrets của SweetMart.Api."""
+    if os.environ.get('SEED_PASSWORD'):
+        return os.environ['SEED_PASSWORD']
+    api = pathlib.Path(__file__).resolve().parents[2] / 'backend' / 'SweetMart.Api'
+    out = subprocess.run(['dotnet', 'user-secrets', 'list', '--project', str(api)], capture_output=True, text=True, encoding='utf-8').stdout
+    for line in out.splitlines():
+        if line.startswith('Seed:DefaultPassword = '):
+            return line.split(' = ', 1)[1]
+    sys.exit('Không tìm thấy mật khẩu mẫu: đặt SEED_PASSWORD hoặc dotnet user-secrets set "Seed:DefaultPassword" ...')
+
+PW = mat_khau_mau()
 
 def call(method, path, body=None, token=None):
     req = urllib.request.Request(B + path, method=method, data=json.dumps(body).encode() if body is not None else None)
