@@ -437,8 +437,8 @@ BL(['**Kiểm tra yêu cầu:** đối chiếu các User Story với FR01–FR21
     '**Điều chỉnh mức ưu tiên:** 13 Story Must have phục vụ trực tiếp mục tiêu G01–G05 được làm trước; 9 Story Should have làm sau khi luồng chính ổn định; '
     '2 Story Could have làm nếu còn thời gian; US25 thuộc Won\'t have của giai đoạn này.',
     '**Đánh giá tính khả thi:** ước lượng độ lớn, xác định phụ thuộc (US15 cần US12; US17 cần US19; US09 cần US08) để sắp thứ tự.',
-    '**Phân bổ dự kiến theo Sprint:** Sprint 1 – US01, US03, US05, US06; Sprint 2 – US07, US08, US09, US11, US12; Sprint 3 – US13, US15, US16, US19 (demo giữa kỳ); '
-    'Sprint 4 – US10, US14, US17, US18, US20, US21; Sprint 5 – US02, US04, US22, US23, US24 và sửa lỗi, đóng gói.',
+    '**Phân bổ dự kiến theo Sprint:** Sprint 1 – thiết lập dự án, US01, US03, US05, US06; Sprint 2 – US07, US08, US09, US11; Sprint 3 – US12, US13, US15, US19 (demo giữa kỳ); '
+    'Sprint 4 – US10, US14, US16, US17, US18, US20; Sprint 5 – US02, US21, US23, US24 (thêm US04, US22 nếu còn thời gian) và sửa lỗi, đóng gói. Chi tiết ước lượng ở Bước 4.',
     '**Chuẩn bị kiểm thử:** viết Acceptance Criteria cho các Story ưu tiên, đặc biệt các chức năng gắn với rủi ro R01, R03, R04 và các kịch bản PoC ở mục 3.3 Bước 1.'])
 
 H(2, '3. Đặc tả chi tiết (User Story & Acceptance Criteria)')
@@ -478,7 +478,7 @@ STORY(9, 'US15', 'Thanh toán VNPay', 'Là khách hàng, tôi muốn thanh toán
     ('AC1 – Thanh toán thành công', 'Đơn ở trạng thái "Chờ thanh toán".', 'Khách thanh toán thành công, VNPay gửi IPN hợp lệ.', 'Hệ thống lưu giao dịch, đơn chuyển "Chờ xác nhận", khách thấy trang thành công.'),
     ('AC2 – IPN sai chữ ký hoặc sai số tiền', 'Hệ thống nhận IPN cho đơn SM000123.', 'Chữ ký không đúng hoặc số tiền khác tổng đơn.', 'Hệ thống từ chối, không cập nhật đơn và ghi log cảnh báo.'),
     ('AC3 – Không thanh toán', 'Khách đóng trang VNPay.', 'Quá 15 phút không có IPN thành công.', 'Đơn tự động hủy và hoàn tồn kho (BR08).'),
-    ('AC4 – IPN gửi trùng', 'Đơn đã được ghi nhận thanh toán.', 'VNPay gửi lại IPN lần hai.', 'Hệ thống không ghi nhận trùng, vẫn phản hồi thành công cho VNPay.')])
+    ('AC4 – IPN gửi trùng', 'Đơn đã được ghi nhận thanh toán.', 'VNPay gửi lại IPN lần hai.', 'Hệ thống không ghi nhận trùng giao dịch và phản hồi RspCode = 02 (đơn đã được xác nhận) theo đặc tả VNPay để VNPay ngừng gửi lại.')])
 STORY(10, 'US19', 'Xác nhận và hủy đơn', 'Là nhân viên, tôi muốn xem, xác nhận hoặc hủy đơn mới để xử lý kịp thời.', [
     ('AC1 – Xác nhận đơn', 'Đơn ở trạng thái "Chờ xác nhận".', 'Nhân viên chọn "Xác nhận".', 'Đơn chuyển "Đã xác nhận", lưu lịch sử người thực hiện và gửi email cho khách.'),
     ('AC2 – Hủy đơn', 'Khách đổi ý, gọi điện báo hủy.', 'Nhân viên chọn "Hủy" và nhập lý do.', 'Đơn chuyển "Đã hủy", tồn kho được hoàn lại.'),
@@ -637,8 +637,9 @@ P('Trạng thái thanh toán được quản lý tách biệt với trạng thá
 
 H(2, '2. Thiết kế cơ sở dữ liệu')
 H(3, '2.1. Sơ đồ thực thể – liên kết (ERD)')
-P('Dựa trên yêu cầu chức năng và sơ đồ lớp, nhóm xác định 14 thực thể dữ liệu. Các quan hệ nhiều – nhiều được tách thành bảng trung gian (GioHang, ChiTietDonHang); '
-  'bảng LoHang tách khỏi SanPham để một sản phẩm có nhiều lô với hạn sử dụng khác nhau.')
+P('Dựa trên yêu cầu chức năng và sơ đồ lớp, nhóm xác định 15 thực thể dữ liệu. Các quan hệ nhiều – nhiều được tách thành bảng trung gian (GioHang, ChiTietDonHang); '
+  'bảng LoHang tách khỏi SanPham để một sản phẩm có nhiều lô với hạn sử dụng khác nhau; bảng PhanBoLo ghi nhận mỗi dòng hàng trong đơn được lấy từ lô nào và bao nhiêu, '
+  'vì theo FEFO một sản phẩm trong cùng một đơn có thể phải lấy từ nhiều lô.')
 IMGF('erd.png', 'Sơ đồ thực thể – liên kết (ERD) của website SweetMart')
 caption('bang', 'Danh sách thực thể và thuộc tính trong ERD')
 T(['STT', 'Thực thể', 'Thuộc tính chính', 'Khóa chính'],
@@ -652,10 +653,11 @@ T(['STT', 'Thực thể', 'Thuộc tính chính', 'Khóa chính'],
    ['8', 'GioHang', 'soLuong', 'maND + maSP'],
    ['9', 'KhuyenMai', 'maCode, loaiGiam, giaTriGiam, donToiThieu, ngayBatDau, ngayKetThuc, soLuotConLai', 'maKM'],
    ['10', 'DonHang', 'ngayDat, tongTienHang, phiVanChuyen, tienGiam, tongThanhToan, phuongThucTT, diaChiGiao, maVanDonGHN, trangThai', 'maDH'],
-   ['11', 'ChiTietDonHang', 'soLuong, donGia, maLo', 'maDH + maSP'],
-   ['12', 'ThanhToan', 'soTien, maGiaoDichVNPay, trangThai, thoiGian', 'maTT'],
-   ['13', 'LichSuDonHang', 'trangThaiCu, trangThaiMoi, nguoiThucHien, thoiGian, ghiChu', 'maLS'],
-   ['14', 'DanhGia', 'soSao, noiDung, ngayDanhGia', 'maDG']],
+   ['11', 'ChiTietDonHang', 'soLuong, donGia', 'maDH + maSP'],
+   ['12', 'PhanBoLo', 'soLuong (số lượng lấy từ lô)', 'maDH + maSP + maLo'],
+   ['13', 'ThanhToan', 'soTien, maGiaoDichVNPay, trangThai, thoiGian', 'maTT'],
+   ['14', 'LichSuDonHang', 'trangThaiCu, trangThaiMoi, nguoiThucHien, thoiGian, ghiChu', 'maLS'],
+   ['15', 'DanhGia', 'soSao, noiDung, ngayDanhGia', 'maDG']],
   [1.2, 3.3, 8.8, 2.6], center_cols=(0,))
 caption('bang', 'Mối quan hệ giữa các thực thể')
 T(['STT', 'Thực thể 1', 'Quan hệ', 'Thực thể 2', 'Mô tả'],
@@ -667,12 +669,13 @@ T(['STT', 'Thực thể 1', 'Quan hệ', 'Thực thể 2', 'Mô tả'],
    ['6', 'SanPham', '1 – n', 'HinhAnhSP', 'Một sản phẩm có nhiều ảnh'],
    ['7', 'SanPham', '1 – n', 'LoHang', 'Một sản phẩm có nhiều lô, mỗi lô có hạn sử dụng riêng'],
    ['8', 'DonHang', 'n – n', 'SanPham', 'Qua bảng ChiTietDonHang'],
-   ['9', 'LoHang', '1 – n', 'ChiTietDonHang', 'Ghi nhận dòng hàng được xuất từ lô nào'],
-   ['10', 'KhuyenMai', '1 – n', 'DonHang', 'Một đơn dùng tối đa một mã (có thể không dùng)'],
-   ['11', 'DonHang', '1 – n', 'ThanhToan', 'Một đơn có thể có nhiều lần giao dịch (thất bại, thành công, hoàn tiền)'],
-   ['12', 'DonHang', '1 – n', 'LichSuDonHang', 'Mọi lần đổi trạng thái được lưu lại'],
-   ['13', 'NguoiDung', '1 – n', 'DanhGia', 'Khách viết nhiều đánh giá'],
-   ['14', 'SanPham', '1 – n', 'DanhGia', 'Một sản phẩm có nhiều đánh giá']],
+   ['9', 'ChiTietDonHang', '1 – n', 'PhanBoLo', 'Một dòng hàng có thể được lấy từ nhiều lô (FEFO)'],
+   ['10', 'LoHang', '1 – n', 'PhanBoLo', 'Một lô cấp hàng cho nhiều đơn; dùng để hoàn đúng lô khi hủy'],
+   ['11', 'KhuyenMai', '1 – n', 'DonHang', 'Một đơn dùng tối đa một mã (có thể không dùng)'],
+   ['12', 'DonHang', '1 – n', 'ThanhToan', 'Một đơn có thể có nhiều lần giao dịch (thất bại, thành công, hoàn tiền)'],
+   ['13', 'DonHang', '1 – n', 'LichSuDonHang', 'Mọi lần đổi trạng thái được lưu lại'],
+   ['14', 'NguoiDung', '1 – n', 'DanhGia', 'Khách viết nhiều đánh giá'],
+   ['15', 'SanPham', '1 – n', 'DanhGia', 'Một sản phẩm có nhiều đánh giá']],
   [1.2, 2.9, 1.7, 3.2, 6.9], center_cols=(0, 2))
 P('Cơ sở dữ liệu được chuẩn hóa đến dạng chuẩn 3 (3NF): mỗi bảng có khóa chính, không có thuộc tính lặp; thuộc tính phụ thuộc đầy đủ vào khóa và không phụ thuộc bắc cầu. '
   'Riêng donGia và diaChiGiao trong đơn hàng được lưu cố định tại thời điểm đặt để giữ đúng lịch sử giao dịch (BR11). Nhóm chọn cơ sở dữ liệu quan hệ SQL Server vì dữ liệu có cấu trúc rõ ràng '
@@ -691,10 +694,11 @@ T(['STT', 'Tên bảng', 'Chức năng'],
    ['8', 'GioHang', 'Sản phẩm trong giỏ của khách'],
    ['9', 'KhuyenMai', 'Mã giảm giá và điều kiện áp dụng'],
    ['10', 'DonHang', 'Thông tin đơn hàng, thanh toán, vận đơn GHN'],
-   ['11', 'ChiTietDonHang', 'Sản phẩm, lô, số lượng, đơn giá trong đơn'],
-   ['12', 'ThanhToan', 'Giao dịch thanh toán VNPay / thu COD'],
-   ['13', 'LichSuDonHang', 'Lịch sử thay đổi trạng thái đơn'],
-   ['14', 'DanhGia', 'Đánh giá sản phẩm của khách']],
+   ['11', 'ChiTietDonHang', 'Sản phẩm, số lượng, đơn giá trong đơn'],
+   ['12', 'PhanBoLo', 'Số lượng của từng dòng hàng được giữ từ lô nào (FEFO, hoàn kho)'],
+   ['13', 'ThanhToan', 'Giao dịch thanh toán VNPay / thu COD'],
+   ['14', 'LichSuDonHang', 'Lịch sử thay đổi trạng thái đơn'],
+   ['15', 'DanhGia', 'Đánh giá sản phẩm của khách']],
   [1.2, 3.6, 11.1], center_cols=(0,))
 P('**a. Nhóm bảng người dùng**', indent=False)
 BL(['**VaiTro:** maVaiTro (PK), tenVaiTro.',
@@ -709,7 +713,9 @@ P('**c. Nhóm bảng giỏ hàng, khuyến mãi và đơn hàng**', indent=False
 BL(['**GioHang:** maND (PK, FK), maSP (PK, FK), soLuong.',
     '**KhuyenMai:** maKM (PK), maCode (duy nhất), loaiGiam (phần trăm / số tiền), giaTriGiam, donToiThieu, ngayBatDau, ngayKetThuc, soLuotConLai.',
     '**DonHang:** maDH (PK), maND (FK), maKM (FK, có thể rỗng), ngayDat, tongTienHang, phiVanChuyen, tienGiam, tongThanhToan, phuongThucTT (COD/VNPAY), diaChiGiao, ghiChu, maVanDonGHN, trangThai.',
-    '**ChiTietDonHang:** maDH (PK, FK), maSP (PK, FK), maLo (FK), soLuong, donGia.'])
+    '**ChiTietDonHang:** maDH (PK, FK), maSP (PK, FK), soLuong, donGia.',
+    '**PhanBoLo:** maDH (PK, FK), maSP (PK, FK), maLo (PK, FK → LoHang), soLuong. Khóa (maDH, maSP) tham chiếu ChiTietDonHang. '
+    'Khi một sản phẩm phải lấy từ 2 lô (ví dụ 3 gói lô A + 2 gói lô B), ChiTietDonHang vẫn chỉ có một dòng 5 gói, còn PhanBoLo có hai dòng; nhờ đó khóa chính không bị trùng và việc hoàn kho cộng lại đúng từng lô.'])
 P('**d. Nhóm bảng thanh toán, lịch sử và đánh giá**', indent=False)
 BL(['**ThanhToan:** maTT (PK), maDH (FK), soTien, maGiaoDichVNPay (duy nhất), maNganHang, trangThai, thoiGian, duLieuIPN.',
     '**LichSuDonHang:** maLS (PK), maDH (FK), trangThaiCu, trangThaiMoi, nguoiThucHien (FK → NguoiDung), thoiGian, ghiChu.',
@@ -807,6 +813,8 @@ T(['Thành phần', 'Quy định'],
    ['Responsive', '< 640px: 2 cột sản phẩm; 640–1024px: 3 cột; > 1024px: 4–5 cột'],
    ['Biểu tượng', 'Bộ icon Lucide, nét 1.5px']],
   [3.6, 12.3])
+
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'buoc45.py'), encoding='utf-8').read())
 
 doc.save(OUT)
 print('saved', cnt)

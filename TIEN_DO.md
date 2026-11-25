@@ -1,47 +1,50 @@
-# SweetMart – Tiến độ dự án (cập nhật 25/11/2026)
+# SweetMart – Tiến độ dự án (cập nhật 25/11/2026, lần 2)
 
 ## Đã xong
 
 ### Tài liệu
-- `docs/SweetMart - Buoc 1-3 (theo mau).docx`: Bước 1 (Khởi tạo), Bước 2 (Yêu cầu), Bước 3 (Thiết kế), theo khung mẫu, font Times New Roman, 48 trang.
-- `docs/so-do/`: toàn bộ sơ đồ dạng PNG (Use Case, Activity, DFD, Sequence, Class, State, ERD, kiến trúc, sitemap, wireframe, roadmap, burndown, Scrum board, Git flow, CI/CD).
-- `docs/cong-cu-tai-lieu/`: script Python sinh sơ đồ và file Word (chạy lại khi cần sửa).
-  - `python diagrams.py <thư mục ảnh>`, `python diagrams2.py <thư mục ảnh>`, `python diagrams3.py <thư mục ảnh>` → vẽ sơ đồ
-  - `python build2.py <thư mục ảnh> <file .docx>` → xuất file Word Bước 1–3
+- **`docs/SweetMart - Buoc 1-5.docx`** (68 trang, Times New Roman) – bản mới nhất, gồm Bước 1–5:
+  - Bước 1–3 theo khung mẫu, **đã sửa**: thêm bảng `PhanBoLo`, bỏ `maLo` khỏi `ChiTietDonHang`, "15 thực thể";
+    US15 – AC4 ghi đúng RspCode = 02; phân bổ Sprint mới ở mục Refinement.
+  - Bước 4 – Lập kế hoạch: vai trò nhóm, sự kiện Scrum, Release Plan, ước lượng Story Point (101 SP), Sprint Goal từng Sprint,
+    Sprint Backlog Sprint 1, DoR/DoD, Scrum board, Burndown, Velocity, ứng phó rủi ro.
+  - Bước 5 – Lập trình: công nghệ, Git flow, cấu trúc mã, CSDL, API, FEFO, máy trạng thái, **tích hợp VNPay/GHN/Email** (trọng tâm),
+    Frontend + 7 ảnh giao diện thật, unit test, CI, Docker.
+  - File cũ `docs/SweetMart - Buoc 1-3 (theo mau).docx` giữ lại để đối chiếu.
+- `docs/so-do/`: sơ đồ PNG + ảnh chụp giao diện `ui_*.jpg`.
+- `docs/cong-cu-tai-lieu/`: script sinh tài liệu.
+  - `python build2.py ../so-do "../SweetMart - Buoc 1-5.docx"` → xuất Word (Bước 4–5 nằm trong `buoc45.py`, được build2.py tự nạp).
+  - `diagrams.py`, `diagrams2.py`, `diagrams3.py <thư mục ảnh>` → vẽ lại sơ đồ.
 
-### Thay đổi thiết kế cần cập nhật vào file Word
-- **Thêm bảng `PhanBoLo` (MaDH, MaSP, MaLo, SoLuong)** và bỏ `MaLo` khỏi `ChiTietDonHang`.
-  Lý do: khóa chính ChiTietDonHang là (MaDH, MaSP); khi một sản phẩm phải lấy từ 2 lô theo FEFO thì sẽ trùng khóa.
-  Ảnh ERD và sơ đồ lớp trong `docs/so-do/` đã được sửa; **nội dung chữ trong file Word (Bước 3 – mục 2.1, 2.2) chưa sửa** (bảng thực thể, bảng quan hệ, Data Dictionary, câu "14 thực thể" → 15).
-- US15 – AC4 (IPN gửi trùng): mã nguồn trả `RspCode = 02` (đơn đã xác nhận) theo đặc tả VNPay; nên sửa câu chữ AC4 cho khớp.
-- Phân bổ Sprint dự kiến mới (dùng cho Bước 4): S1 – thiết lập dự án, US01, US03, US05, US06 · S2 – US07, US08, US09, US11 ·
-  S3 – US12, US13, US15, US19 (demo giữa kỳ) · S4 – US10, US14, US16, US17, US18, US20 · S5 – US02, US21, US23, US24 (+US04, US22 nếu còn thời gian).
+### Mã nguồn
+- `backend/SweetMart.Api`: ASP.NET Core 9 + EF Core + SQL Server; VNPay, GHN, Email (có bản giả lập khi chưa có khóa).
+  - Sửa 25/11: IPN trả đúng khóa `RspCode`/`Message` (trước đó bị đổi thành `rspCode` → VNPay sẽ không đọc được).
+  - Sửa 25/11: DbSeeder từ chối tạo tài khoản mẫu nếu `Seed:DefaultPassword` rỗng.
+- `backend/SweetMart.Tests`: 32 unit test – **đạt 32/32**.
+- `docs/cong-cu-tai-lieu/smoke.py`: kiểm thử tích hợp đầu – cuối, **đạt 21/21**; mỗi lần chạy tự đăng ký khách mới nên chạy lại được nhiều lần.
+- **`frontend/`** (React 19 + Vite): trang chủ (lọc, sắp xếp, tìm không dấu), chi tiết SP, giỏ hàng, đặt hàng (địa chỉ, phí GHN, mã giảm giá, COD/VNPay),
+  kết quả VNPay, đơn của tôi (hủy, đánh giá), đăng nhập/đăng ký/quên mật khẩu; trang quản trị theo vai trò: đơn hàng, kho & lô, sản phẩm, mã giảm giá, báo cáo, người dùng.
+  Đã chạy thử luồng: đăng nhập → tìm → thêm giỏ → đặt COD → nhân viên xác nhận → đóng gói → tạo vận đơn GHN.
+- `docker-compose.yml` (SQL Server + API + Nginx), `.env.example`, Dockerfile cho API và Web, `frontend/nginx.conf`.
+- `.github/workflows/ci.yml`: build + test Backend, lint + build Frontend, build Docker image.
+- `README.md`: hướng dẫn chạy, test, cấu hình khóa, Docker, tài khoản mẫu.
 
-### Mã nguồn (Bước 5)
-- `backend/SweetMart.Api`: ASP.NET Core 9 Web API + EF Core + SQL Server.
-  - Nghiệp vụ: đặt hàng (transaction), giữ kho theo FEFO có khóa UPDLOCK, mã giảm giá, máy trạng thái đơn, hủy đơn/hoàn kho, báo cáo.
-  - Tích hợp: VNPay (tạo URL ký HMAC-SHA512, xử lý IPN), GHN (tính phí, tạo vận đơn, webhook), Email SMTP.
-    Chưa có khóa thật thì tự dùng bản giả lập (FakeGhnClient, LogEmailSender).
-  - Job nền tự hủy đơn VNPay quá 15 phút.
-  - Swagger tại `/swagger` khi chạy Development.
-- `backend/SweetMart.Tests`: 32 unit test xUnit (SQLite in-memory) – **đang đạt 32/32**.
-- `backend/SweetMart.Api/Data/Migrations` + `database/schema.sql`: migration và script tạo CSDL.
-- Đã chạy thử với SQL Server Express trên máy (CSDL `SweetMartDb` đã được tạo và nạp dữ liệu mẫu).
+## Chưa làm / cần anh tự làm
+1. **Đưa lên GitHub**: repo Git đã có trên máy (nhánh `main` + `develop`). Còn tạo repo trên GitHub rồi
+   `git remote add origin <url>` và `git push -u origin main develop` để CI chạy.
+   Lưu ý: `appsettings.Development.json` (khóa JWT dev + mật khẩu tài khoản mẫu) đang được theo dõi trong Git – chỉ là giá trị dev,
+   không phải khóa thật; nếu repo để công khai thì nên đổi sang user-secrets.
+2. **Docker chưa chạy thử** vì máy chưa cài Docker Desktop (file compose đã kiểm tra cú pháp YAML).
+3. Đăng ký sandbox **VNPay** và **GHN dev**, điền khóa bằng `dotnet user-secrets` (xem README). IPN cần URL công khai (ngrok/cloudflared).
+4. Điền tên thật các thành viên thay cho `[Thành viên 1..5]` trong tài liệu (sửa trong build2.py / buoc45.py rồi build lại).
+5. Bước 6 (Kiểm thử) trở đi chưa viết.
+6. Lưu ý nhỏ Frontend: nút "Đánh giá" trong chi tiết đơn không biết sản phẩm đã được đánh giá từ trước (Backend vẫn chặn trùng và báo lỗi).
 
-## Chưa làm
-1. Chạy hết script kiểm thử tích hợp `docs/cong-cu-tai-lieu/smoke.py`.
-   Lần chạy trước dừng ở bước in tiếng Việt ra console; cần chạy với `PYTHONUTF8=1`, API phải đang chạy ở cổng 5080.
-2. Frontend React (Vite): trang chủ, danh sách/chi tiết SP, giỏ hàng, checkout, kết quả VNPay, đơn của tôi, trang quản trị.
-3. Docker (`docker-compose.yml`), GitHub Actions CI (`.github/workflows/ci.yml`), `README.md`.
-4. Viết Bước 4 (Lập kế hoạch) và Bước 5 (Lập trình) vào file Word.
-   Sơ đồ đã có sẵn: `roadmap.png`, `burndown.png` (minh họa), `scrumboard.png`, `gitflow.png`, `cicd.png`.
-5. Đăng ký tài khoản sandbox VNPay, GHN và điền khóa (không commit khóa thật – dùng `dotnet user-secrets`).
-
-## Chạy Backend
+## Chạy nhanh
 ```
-cd backend/SweetMart.Api
-dotnet run --urls http://localhost:5080
+cd backend/SweetMart.Api && dotnet run --urls http://localhost:5080     # API + Swagger /swagger
+cd frontend && npm install && npm run dev                                # http://localhost:5173
+dotnet test                                                              # tại thư mục SweetMart
+PYTHONUTF8=1 python docs/cong-cu-tai-lieu/smoke.py backend/SweetMart.Api/appsettings.Development.json
 ```
-- Tài khoản mẫu (vai trò quản trị, quản lý, nhân viên, khách hàng) được tạo trong `Data/DbSeeder.cs`.
-- Mật khẩu mẫu nằm ở `Seed:DefaultPassword` trong `appsettings.Development.json`.
-- Chạy test: `dotnet test` (tại thư mục SweetMart).
+Tài khoản mẫu: `quantri@ / quanly@ / nhanvien@ / khachhang@sweetmart.test`, mật khẩu ở `Seed:DefaultPassword` trong `appsettings.Development.json`.

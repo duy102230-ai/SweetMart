@@ -1,4 +1,4 @@
-import json, sys, urllib.request, urllib.error
+import json, sys, time, urllib.request, urllib.error
 B = 'http://localhost:5080'
 cfg = json.load(open(sys.argv[1], encoding='utf-8'))
 PW = cfg['Seed']['DefaultPassword']
@@ -17,7 +17,15 @@ def login(email):
     s, r = call('POST', '/api/auth/login', {'email': email, 'matKhau': PW}); assert s == 200, (s, r); return r['token']
 
 ok = lambda name, cond, extra='': print(('PASS ' if cond else 'FAIL ') + name, extra)
-kh, nv, ql = login('khachhang@sweetmart.test'), login('nhanvien@sweetmart.test'), login('quanly@sweetmart.test')
+nv, ql = login('nhanvien@sweetmart.test'), login('quanly@sweetmart.test')
+# Mỗi lần chạy đăng ký một khách mới để chạy lại được nhiều lần (mã CHAOBAN chỉ dùng 1 lần/khách)
+email = f'smoke{int(time.time())}@sweetmart.test'
+s, r = call('POST', '/api/auth/register', {'email': email, 'matKhau': 'Smoke12345', 'hoTen': 'Khách kiểm thử', 'soDienThoai': '0900000009'})
+ok('Đăng ký tài khoản khách', s == 200 and r['vaiTro'] == 'KhachHang', email)
+kh = r['token']
+s, r = call('POST', '/api/addresses', {'nguoiNhan': 'Khách kiểm thử', 'soDienThoai': '0900000009', 'diaChiChiTiet': '484 Lạch Tray, Lê Chân, Hải Phòng',
+                                       'maQuanHuyenGHN': 1588, 'maPhuongXaGHN': '30210', 'macDinh': True}, kh)
+ok('Thêm địa chỉ giao hàng', s == 200 and r['macDinh'], r.get('maDC'))
 
 s, r = call('GET', '/api/products?keyword=banh%20quy%20bo')
 ok('Tìm kiếm không dấu "banh quy bo"', s == 200 and r['total'] >= 1, [i['tenSP'] for i in r['items']])
@@ -25,8 +33,8 @@ sp = r['items'][0]
 s, d = call('GET', f"/api/products/{sp['maSP']}")
 ok('Chi tiết có HSD lô gần nhất', s == 200 and d['hanSuDungGanNhat'] is not None, f"HSD {d['hanSuDungGanNhat']}, tồn {d['tonKhaDung']}")
 
-s, r = call('PUT', '/api/cart/items', {'maSP': sp['maSP'], 'soLuong': 9999}, kh)
-ok('Giỏ hàng chặn vượt tồn kho', s in (400, 409), r)
+s, r = call('PUT', '/api/cart/items', {'maSP': sp['maSP'], 'soLuong': 500}, kh)
+ok('Giỏ hàng chặn vượt tồn kho (BR04)', s == 409 and r.get('code') == 'OUT_OF_STOCK', r)
 s, _ = call('PUT', '/api/cart/items', {'maSP': sp['maSP'], 'soLuong': 2}, kh)
 s, addr = call('GET', '/api/addresses', token=kh)
 mdc = addr[0]['maDC']
@@ -41,6 +49,7 @@ call('PUT', '/api/cart/items', {'maSP': sp['maSP'], 'soLuong': 1}, kh)
 s, don2 = call('POST', '/api/orders', {'maDC': mdc, 'phuongThucTT': 'VNPAY'}, kh)
 ok('Đặt hàng VNPay trả paymentUrl có chữ ký', s == 201 and 'vnp_SecureHash=' in (don2['paymentUrl'] or ''), don2['trangThai'])
 
+if 'maDH' not in don: sys.exit('Dừng: không tạo được đơn COD')
 mid = don['maDH']
 s, _ = call('GET', '/api/admin/reports/revenue', token=nv)
 ok('Nhân viên xem doanh thu bị chặn (403)', s == 403, s)
@@ -62,3 +71,5 @@ s, r = call('GET', '/api/admin/batches?canDate=true', token=nv)
 ok('Danh sách lô cận date', s == 200 and len(r) >= 1, [(x['tenSP'], x['hanSuDung']) for x in r][:4])
 s, r = call('GET', '/api/payments/vnpay/ipn?vnp_TxnRef=1&vnp_Amount=100&vnp_SecureHash=abc')
 ok('IPN giả mạo bị từ chối (97)', r == {'RspCode': '97', 'Message': 'Invalid signature'}, r)
+s, r = call('POST', '/api/auth/login', {'email': email, 'matKhau': 'sai-mat-khau-1'})
+ok('Đăng nhập sai mật khẩu bị từ chối', s in (400, 401), s)

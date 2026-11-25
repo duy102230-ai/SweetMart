@@ -11,7 +11,8 @@ public static class DbSeeder
     {
         if (!await db.NguoiDung.AnyAsync())
         {
-            var pass = config["Seed:DefaultPassword"] ?? throw new InvalidOperationException("Thiếu cấu hình Seed:DefaultPassword");
+            var pass = config["Seed:DefaultPassword"];
+            if (string.IsNullOrWhiteSpace(pass)) throw new InvalidOperationException("Thiếu cấu hình Seed:DefaultPassword");
             var hash = BCrypt.Net.BCrypt.HashPassword(pass);
             db.NguoiDung.AddRange(
                 new NguoiDung { Email = "quantri@sweetmart.test", HoTen = "Quản trị hệ thống", MaVaiTro = VaiTros.MaQuanTri, MatKhauHash = hash },

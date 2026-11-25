@@ -242,7 +242,8 @@ public class PaymentsController(ThanhToanService thanhToan, VnPayClient vnPay) :
     {
         var q = Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
         var r = await thanhToan.XuLyIpnAsync(q, ct);
-        return Ok(new { RspCode = r.RspCode, Message = r.Message });
+        // VNPay yêu cầu đúng tên khóa "RspCode"/"Message" (phân biệt hoa thường) – dùng Dictionary để không bị đổi sang camelCase.
+        return Ok(new Dictionary<string, string> { ["RspCode"] = r.RspCode, ["Message"] = r.Message });
     }
 
     /// <summary>Frontend gửi lại tham số ReturnUrl để kiểm tra chữ ký trước khi hiển thị; không cập nhật dữ liệu.</summary>

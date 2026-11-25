@@ -1,0 +1,53 @@
+# Chạy toàn bộ SweetMart: SQL Server + Backend ASP.NET Core + Frontend (Nginx)
+#   1) cp .env.example .env   rồi điền mật khẩu / khóa
+#   2) docker compose up -d --build
+#   3) mở http://localhost:8080
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${DB_PASSWORD:?Thiếu DB_PASSWORD trong .env}
+      MSSQL_PID: Express
+    volumes:
+      - sqldata:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  api:
+    build: ./backend/SweetMart.Api
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: on-failure
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__Default: "Server=db;Database=SweetMartDb;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True"
+      Jwt__Key: ${JWT_KEY:?Thiếu JWT_KEY trong .env}
+      App__FrontendUrl: ${PUBLIC_URL:-http://localhost:8080}
+      App__CorsOrigins__0: ${PUBLIC_URL:-http://localhost:8080}
+      Seed__Enabled: ${SEED_ENABLED:-true}
+      Seed__DefaultPassword: ${SEED_PASSWORD:?Thiếu SEED_PASSWORD trong .env}
+      VnPay__TmnCode: ${VNPAY_TMN_CODE:-}
+      VnPay__HashSecret: ${VNPAY_HASH_SECRET:-}
+      VnPay__ReturnUrl: ${PUBLIC_URL:-http://localhost:8080}/thanh-toan/ket-qua
+      Ghn__Token: ${GHN_TOKEN:-}
+      Ghn__ShopId: ${GHN_SHOP_ID:-0}
+      Ghn__WebhookToken: ${GHN_WEBHOOK_TOKEN:-}
+      Smtp__User: ${SMTP_USER:-}
+      Smtp__Password: ${SMTP_PASSWORD:-}
+      Smtp__From: ${SMTP_FROM:-}
+
+  web:
+    build: ./frontend
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+
+volumes:
+  sqldata:
