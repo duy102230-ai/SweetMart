@@ -30,10 +30,9 @@
 - `README.md`: hướng dẫn chạy, test, cấu hình khóa, Docker, tài khoản mẫu.
 
 ## Chưa làm / cần anh tự làm
-1. **Đưa lên GitHub**: repo Git đã có trên máy (nhánh `main` + `develop`). Còn tạo repo trên GitHub rồi
-   `git remote add origin <url>` và `git push -u origin main develop` để CI chạy.
-   Lưu ý: `appsettings.Development.json` (khóa JWT dev + mật khẩu tài khoản mẫu) đang được theo dõi trong Git – chỉ là giá trị dev,
-   không phải khóa thật; nếu repo để công khai thì nên đổi sang user-secrets.
+1. **GitHub**: đã đưa lên repo riêng tư https://github.com/iamduydzs1-web/SweetMart (nhánh `main` + `develop`).
+   GitHub Actions đang báo "not currently enabled" dù cài đặt repo đã là "Allow all actions" → kiểm tra giới hạn ở cấp tài khoản
+   (tài khoản mới / xác minh / billing) để CI chạy được.
 2. **Docker chưa chạy thử** vì máy chưa cài Docker Desktop (file compose đã kiểm tra cú pháp YAML).
 3. Đăng ký sandbox **VNPay** và **GHN dev**, điền khóa bằng `dotnet user-secrets` (xem README). IPN cần URL công khai (ngrok/cloudflared).
 4. Điền tên thật các thành viên thay cho `[Thành viên 1..5]` trong tài liệu (sửa trong build2.py / buoc45.py rồi build lại).
