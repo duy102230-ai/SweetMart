@@ -30,9 +30,11 @@
 - `README.md`: hướng dẫn chạy, test, cấu hình khóa, Docker, tài khoản mẫu.
 
 ## Chưa làm / cần anh tự làm
-1. **GitHub**: repo công khai https://github.com/duy102230-ai/SweetMart (nhánh `main` + `develop`, remote `origin`).
-   Repo cũ riêng tư `iamduydzs1-web/SweetMart` (remote `old-origin`) không chạy được Actions.
-   Khóa JWT dev và mật khẩu tài khoản mẫu đã chuyển sang `dotnet user-secrets` (giá trị cũ trong lịch sử Git không còn dùng).
+1. **Git + CI**: repo chính trên GitLab https://gitlab.com/sweetmart-btl/SweetMart (remote `origin`), CI là `.gitlab-ci.yml`.
+   Bản sao trên GitHub https://github.com/duy102230-ai/SweetMart (remote `github`) – GitHub chặn Actions ở repo này nên chuyển sang GitLab.
+   Repo cũ `iamduydzs1-web/SweetMart` (remote `old-origin`) bỏ.
+   Khóa JWT dev và mật khẩu tài khoản mẫu nằm trong `dotnet user-secrets` (giá trị cũ trong lịch sử Git không còn dùng).
+   Tài liệu Bước 4–5 đã đổi sang GitLab (Issue Board, Merge Request, GitLab CI/CD).
 2. **Docker chưa chạy thử** vì máy chưa cài Docker Desktop (file compose đã kiểm tra cú pháp YAML).
 3. Đăng ký sandbox **VNPay** và **GHN dev**, điền khóa bằng `dotnet user-secrets` (xem README). IPN cần URL công khai (ngrok/cloudflared).
 4. Điền tên thật các thành viên thay cho `[Thành viên 1..5]` trong tài liệu (sửa trong build2.py / buoc45.py rồi build lại).

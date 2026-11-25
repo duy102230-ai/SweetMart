@@ -56,9 +56,9 @@ T(['Sự kiện', 'Thời điểm', 'Thời lượng', 'Đầu ra'],
    ['Daily Scrum', 'Mỗi tối (họp trực tuyến)', '15 phút', 'Mỗi người trả lời: hôm qua làm gì, hôm nay làm gì, vướng gì; cập nhật bảng công việc'],
    ['Backlog Refinement', 'Giữa Sprint', '45 phút', 'Story của Sprint sau được làm rõ, ước lượng, đạt Definition of Ready'],
    ['Sprint Review', 'Ngày cuối Sprint', '1 giờ', 'Demo Increment cho PO; PO chấp nhận / trả lại Story; cập nhật Backlog'],
-   ['Sprint Retrospective', 'Sau Sprint Review', '45 phút', '1–2 cải tiến cụ thể cho Sprint sau (ví dụ: review PR trong 24 giờ)']],
+   ['Sprint Retrospective', 'Sau Sprint Review', '45 phút', '1–2 cải tiến cụ thể cho Sprint sau (ví dụ: review MR trong 24 giờ)']],
   [3.4, 3.6, 2.2, 6.7])
-P('Công cụ hỗ trợ: **GitHub Projects** (bảng Scrum, gắn Issue với Pull Request), **GitHub Issues** (User Story, task, lỗi), **Figma** (wireframe, prototype), '
+P('Công cụ hỗ trợ: **GitLab Issue Board** (bảng Scrum, gắn Issue với Merge Request), **GitLab Issues** (User Story, task, lỗi), **Figma** (wireframe, prototype), '
   '**Google Meet / Zalo** (Daily Scrum), **Google Drive** (tài liệu, biên bản họp).')
 
 H(2, '2. Kế hoạch phát hành (Release Plan)')
@@ -126,7 +126,7 @@ P('**Sprint Goal:** "Người dùng đăng nhập theo vai trò; quản lý đư
   'mỗi người khoảng 10–12 giờ/tuần cho đồ án) và chia Story thành các task không quá 1 ngày làm việc:')
 caption('bang', 'Sprint Backlog của Sprint 1')
 T(['Task', 'Mô tả', 'Story', 'Người nhận', 'Giờ'],
-  [['T01', 'Khởi tạo repo GitHub (main, develop), GitHub Actions, Docker SQL Server', 'TS0', 'TV5', '6'],
+  [['T01', 'Khởi tạo repo GitLab (main, develop), GitLab CI/CD, Docker SQL Server', 'TS0', 'TV5', '6'],
    ['T02', 'API đăng ký, đăng nhập, phát JWT, khóa 15 phút sau 5 lần sai', 'US01', 'TV4', '8'],
    ['T03', 'Trang đăng ký / đăng nhập, lưu phiên, chặn trang theo vai trò', 'US01', 'TV3', '6'],
    ['T04', 'Phân quyền [Authorize(Roles)], API tạo tài khoản nhân viên, khóa tài khoản', 'US03', 'TV2', '6'],
@@ -143,15 +143,15 @@ caption('bang', 'Definition of Ready (DoR) và Definition of Done (DoD) của nh
 T(['Definition of Ready – Story được đưa vào Sprint khi', 'Definition of Done – Story được coi là xong khi'],
   [['• Viết đúng mẫu "Là… tôi muốn… để…"\n• Có Acceptance Criteria dạng Cho trước / Khi / Thì\n• Đã ước lượng Story Point, không quá 8 SP\n'
     '• Có wireframe nếu có giao diện\n• Đã rõ API đối tác cần dùng (VNPay, GHN) và có tài khoản sandbox\n• Không còn phụ thuộc chưa xong',
-    '• Mã nguồn trên nhánh feature, đã tạo Pull Request vào develop\n• Ít nhất 1 thành viên khác review và chấp thuận\n• Unit test cho quy tắc nghiệp vụ mới, CI xanh (build + test + lint)\n'
+    '• Mã nguồn trên nhánh feature, đã tạo Merge Request vào develop\n• Ít nhất 1 thành viên khác review và chấp thuận\n• Unit test cho quy tắc nghiệp vụ mới, CI xanh (build + test + lint)\n'
     '• Đạt toàn bộ Acceptance Criteria khi chạy thử trên môi trường thử\n• Không ghi khóa bí mật vào mã nguồn\n• Cập nhật README / Swagger / tài liệu liên quan\n• PO chấp nhận trong Sprint Review']],
   [7.95, 7.95], fs=11.5)
 P('Một Story chưa kiểm thử hoặc chưa được PO chấp nhận thì không tính vào velocity, được đưa trở lại Product Backlog để sắp xếp cho Sprint sau.')
 
 H(2, '7. Theo dõi tiến độ')
 H(3, '7.1. Bảng Scrum (Scrum Board)')
-P('Mỗi task là một thẻ trên GitHub Projects, đi qua các cột **To Do → In Progress → Code Review → Testing → Done**. Mỗi thành viên không giữ quá 2 thẻ ở cột In Progress cùng lúc '
-  'để hạn chế làm dở dang. Thẻ được liên kết với Pull Request; cấu hình tự động của GitHub Projects chuyển thẻ sang Testing khi PR được merge.')
+P('Mỗi task là một thẻ trên GitLab Issue Board, đi qua các cột **To Do → In Progress → Code Review → Testing → Done**. Mỗi thành viên không giữ quá 2 thẻ ở cột In Progress cùng lúc '
+  'để hạn chế làm dở dang. Thẻ được liên kết với Merge Request; khi MR có dòng "Closes #xx" được merge, GitLab tự đóng Issue tương ứng và thẻ chuyển sang Done.')
 IMGF('scrumboard.png', 'Bảng Scrum giữa Sprint 1 (minh họa)')
 H(3, '7.2. Biểu đồ Burndown và Velocity')
 P('Burndown Chart thể hiện số Story Point còn lại theo từng ngày làm việc so với đường lý tưởng. Đường thực tế nằm trên đường lý tưởng là dấu hiệu chậm tiến độ; '
@@ -165,7 +165,7 @@ T(['Rủi ro', 'Hoạt động trong kế hoạch', 'Thời điểm'],
   [['R01 – Tích hợp VNPay lỗi', 'PoC ký và xác thực chữ ký ở Sprint 0; US15 đặt ở Sprint 3 (trước demo); ghi log toàn bộ IPN', 'Sprint 0, 3'],
    ['R03 – Bán vượt tồn / sai lô', 'US09 làm sớm ở Sprint 2, có unit test cho FEFO, lô hết hạn, hoàn kho', 'Sprint 2'],
    ['R04 – GHN không phản hồi', 'Tách IGhnClient, có bản giả lập để các Sprint khác không bị chặn; phí ship mặc định khi GHN lỗi', 'Sprint 4'],
-   ['R06 – Thành viên chưa vững công nghệ', 'Lập trình cặp cho Story 8 SP; review PR bắt buộc', 'Mọi Sprint'],
+   ['R06 – Thành viên chưa vững công nghệ', 'Lập trình cặp cho Story 8 SP; review MR bắt buộc', 'Mọi Sprint'],
    ['R08 – Trễ tiến độ do lịch thi', 'Sprint 5 nhẹ hơn; 3 tuần dự phòng cuối; cắt Story Could have trước', 'Sprint 5'],
    ['R11 – Triển khai lỗi sát ngày bảo vệ', 'Đóng gói Docker Compose, chạy thử triển khai cuối mỗi Sprint', 'Từ Sprint 2']],
   [4.2, 9.0, 2.7])
@@ -177,7 +177,7 @@ T(['Rủi ro', 'Hoạt động trong kế hoạch', 'Thời điểm'],
 doc.add_page_break()
 H(1, 'BƯỚC 5. LẬP TRÌNH (IMPLEMENTATION)')
 P('Bước 5 hiện thực thiết kế ở Bước 3 thành mã nguồn chạy được theo kế hoạch Sprint ở Bước 4. Nhóm làm theo thứ tự **CSDL (migration) → Backend / API → Frontend → tích hợp hệ thống ngoài**; '
-  'mọi thay đổi đi qua Git, Pull Request và CI. Đầu ra của bước này gồm: mã nguồn trên Git, unit test, pipeline CI, Dockerfile và README hướng dẫn chạy.')
+  'mọi thay đổi đi qua Git, Merge Request và CI. Đầu ra của bước này gồm: mã nguồn trên Git, unit test, pipeline CI, Dockerfile và README hướng dẫn chạy.')
 
 H(2, '1. Môi trường và công nghệ')
 caption('bang', 'Công nghệ sử dụng trong dự án')
@@ -189,19 +189,19 @@ T(['Thành phần', 'Công nghệ', 'Vai trò'],
    ['Tài liệu API', 'Swagger (Swashbuckle)', 'Thử API trực tiếp tại /swagger'],
    ['Kiểm thử', 'xUnit + SQLite in-memory; script Python', 'Unit test nghiệp vụ; kiểm thử tích hợp đầu – cuối'],
    ['Tích hợp', 'VNPay 2.1.0 (sandbox), GHN API v2 (dev), SMTP Gmail', 'Thanh toán, vận chuyển, email'],
-   ['Đóng gói, CI', 'Docker, Docker Compose, Nginx, GitHub Actions', 'Build, test tự động, triển khai'],
-   ['Công cụ', 'Visual Studio 2022 / VS Code, Git, GitHub, Postman', 'Lập trình, quản lý mã nguồn, thử API']],
+   ['Đóng gói, CI', 'Docker, Docker Compose, Nginx, GitLab CI/CD', 'Build, test tự động, triển khai'],
+   ['Công cụ', 'Visual Studio 2022 / VS Code, Git, GitLab, Postman', 'Lập trình, quản lý mã nguồn, thử API']],
   [3.2, 6.4, 6.3])
 
 H(2, '2. Quy trình làm việc với Git')
 P('Nhóm dùng mô hình nhánh rút gọn từ Git Flow:')
 BL(['**main:** chỉ chứa mã đã phát hành (v0.1, v0.2, v1.0), được gắn tag; không commit trực tiếp.',
-    '**develop:** nhánh tích hợp của Sprint; mọi Pull Request (PR) đều merge vào đây sau khi CI xanh và được review.',
+    '**develop:** nhánh tích hợp của Sprint; mọi Merge Request (MR – tương đương Pull Request trên GitHub) đều merge vào đây sau khi CI xanh và được review.',
     '**feature/USxx-ten-ngan:** mỗi Story hoặc task một nhánh, tách từ develop, ví dụ feature/US12-dat-hang-cod, feature/US15-thanh-toan-vnpay.',
     '**fix/...:** sửa lỗi phát hiện khi kiểm thử; lỗi khẩn trên bản phát hành sửa ở hotfix/... rồi merge về cả main và develop.'])
 IMGF('gitflow.png', 'Luồng nhánh Git khi phát triển US12 và US15')
 P('Commit viết theo quy ước **Conventional Commits** để dễ đọc lịch sử: feat(order): tạo đơn COD; fix(payment): IPN trả 02 khi gửi trùng; test(inventory): FEFO bỏ qua lô hết hạn; '
-  'docs: cập nhật README. Mỗi PR mô tả Story liên quan, cách kiểm tra, ảnh chụp giao diện (nếu có) và phải có ít nhất một người khác chấp thuận trước khi merge (squash merge).')
+  'docs: cập nhật README. Mỗi MR mô tả Story liên quan, cách kiểm tra, ảnh chụp giao diện (nếu có) và phải có ít nhất một người khác chấp thuận trước khi merge (squash merge).')
 
 H(2, '3. Cấu trúc mã nguồn')
 CODE('''SweetMart/
@@ -222,7 +222,7 @@ CODE('''SweetMart/
 │   ├── pages/admin/    # DonHang, Kho, SanPham, KhuyenMai, BaoCao, NguoiDung
 │   └── api.js, auth.jsx  # gọi API kèm JWT, phân quyền phía giao diện
 ├── database/schema.sql # script tạo CSDL sinh từ migration
-└── docker-compose.yml, .github/workflows/ci.yml, README.md''', 'Hình thức tổ chức thư mục:')
+└── docker-compose.yml, .gitlab-ci.yml, README.md''', 'Hình thức tổ chức thư mục:')
 P('Backend tổ chức theo lớp: **Controller** chỉ nhận yêu cầu và trả kết quả; **Service** chứa toàn bộ quy tắc nghiệp vụ; **Integration** đóng gói giao thức với đối tác; '
   '**Data** lo truy cập CSDL. Cách tách này giúp viết unit test cho Service mà không cần chạy web, và thay đối tác (ví dụ thêm MoMo) chỉ ảnh hưởng thư mục Integrations.')
 
@@ -385,12 +385,12 @@ P('Ngoài unit test, script **smoke.py** chạy kiểm thử tích hợp đầu 
   'Kiểm thử hệ thống và kiểm thử chấp nhận chi tiết được trình bày ở Bước 6.')
 
 H(2, '9. Tích hợp liên tục (CI) và đóng gói')
-P('Pipeline GitHub Actions (.github/workflows/ci.yml) chạy mỗi khi push hoặc mở PR vào main, develop, feature/**:')
-BL(['**Job backend:** cài .NET 9 → restore → build Release → chạy 32 unit test → lưu kết quả .trx làm bằng chứng.',
-    '**Job frontend:** cài Node 22 → npm ci → lint (ESLint) → build.',
-    '**Job docker:** chỉ chạy trên main / develop sau khi hai job trên đạt; build image API và Web để bảo đảm Dockerfile luôn dùng được.'])
+P('Pipeline GitLab CI/CD (.gitlab-ci.yml) chạy trên shared runner của GitLab mỗi khi push lên main, develop, feature/** hoặc mở Merge Request:')
+BL(['**Job backend** (image .NET SDK 9): restore → build Release → chạy 32 unit test → lưu kết quả .trx làm bằng chứng.',
+    '**Job frontend** (image Node 22): npm ci → lint (ESLint) → build.',
+    '**Job docker** (Docker-in-Docker): chỉ chạy trên main / develop sau khi hai job trên đạt; build image API và Web để bảo đảm Dockerfile luôn dùng được.'])
 IMGF('cicd.png', 'Quy trình CI/CD của dự án')
-P('Nếu một bước lỗi, pipeline báo đỏ và PR không được merge (theo DoD). Bước triển khai tự động lên môi trường staging được bổ sung ở Bước 7 (Triển khai).')
+P('Nếu một bước lỗi, pipeline báo đỏ và MR không được merge (theo DoD). Bước triển khai tự động lên môi trường staging được bổ sung ở Bước 7 (Triển khai).')
 P('**Đóng gói Docker:** docker-compose.yml gồm 3 dịch vụ: **db** (SQL Server 2022, có healthcheck), **api** (ASP.NET Core, chỉ khởi động khi db sẵn sàng, tự áp dụng migration), '
   '**web** (Nginx phục vụ bản build React và chuyển tiếp /api sang api). Chỉ cần sao chép .env.example thành .env, điền mật khẩu, khóa rồi chạy docker compose up -d --build. '
   'README.md hướng dẫn đầy đủ cách chạy trên máy, chạy test, cấu hình khóa VNPay / GHN / SMTP và tài khoản mẫu.')
@@ -399,9 +399,9 @@ H(2, '10. Kết quả Bước 5')
 caption('bang', 'Đối chiếu đầu ra Bước 5 với yêu cầu của bài giảng')
 T(['Đầu ra yêu cầu', 'Kết quả của nhóm'],
   [['Mã nguồn trên Git', 'Repo gồm backend (ASP.NET Core 9), frontend (React), database, docs; nhánh main / develop / feature'],
-   ['Lịch sử Pull Request', 'Quy ước mỗi Story một nhánh feature, merge vào develop qua PR có review (mục 2)'],
+   ['Lịch sử Pull Request', 'Trên GitLab gọi là Merge Request: mỗi Story một nhánh feature, merge vào develop qua MR có review (mục 2)'],
    ['Unit test', '32 unit test nghiệp vụ, đạt 32/32; thêm kiểm thử tích hợp smoke.py đạt 21/21'],
-   ['Pipeline CI', 'GitHub Actions: build + test Backend, lint + build Frontend, build Docker image'],
+   ['Pipeline CI', 'GitLab CI/CD: build + test Backend, lint + build Frontend, build Docker image'],
    ['README', 'Hướng dẫn chạy dev, chạy Docker, cấu hình khóa tích hợp, tài khoản mẫu'],
    ['Tích hợp hệ thống', 'VNPay (URL ký HMAC-SHA512, IPN, ReturnUrl), GHN (phí, vận đơn, webhook), Email SMTP (hàng đợi nền); có bản giả lập khi chưa có khóa']],
   [4.2, 11.7])

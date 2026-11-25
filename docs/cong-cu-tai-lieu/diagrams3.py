@@ -83,11 +83,11 @@ def gitflow():
     ln((X0 + 0.9, 2.6), (X0 + 1.3, 1.6), ORANGE); ln((X0 + 1.3, 1.6), (X0 + 3.6, 1.6), ORANGE)
     for x in (X0 + 1.3, X0 + 2.0, X0 + 2.8, X0 + 3.6): dot(x, 1.6, ORANGE)
     ln((X0 + 3.6, 1.6), (X0 + 4.1, 2.6), ORANGE); dot(X0 + 4.1, 2.6, TEAL)
-    ax.text(X0 + 4.1, 2.85, 'PR #12\n(squash)', ha='center', fontsize=7, color=TEAL)
+    ax.text(X0 + 4.1, 2.85, 'MR !12\n(squash)', ha='center', fontsize=7, color=TEAL)
     ln((X0 + 1.6, 2.6), (X0 + 2.1, 0.6), '#8B5CF6'); ln((X0 + 2.1, 0.6), (X0 + 5.2, 0.6), '#8B5CF6')
     for x in (X0 + 2.1, X0 + 3.0, X0 + 4.3, X0 + 5.2): dot(x, 0.6, '#8B5CF6')
     ln((X0 + 5.2, 0.6), (X0 + 5.7, 2.6), '#8B5CF6'); dot(X0 + 5.7, 2.6, TEAL)
-    ax.text(X0 + 5.7, 2.85, 'PR #15', ha='center', fontsize=7, color=TEAL)
+    ax.text(X0 + 5.7, 2.85, 'MR !15', ha='center', fontsize=7, color=TEAL)
     ln((X0 + 6.3, 2.6), (X0 + 6.8, 3.6), TEAL); dot(X0 + 6.8, 3.6, NAVY)
     ax.text(X0 + 6.8, 3.85, 'v0.2 (demo giữa kỳ)', ha='center', fontsize=7.5, color=NAVY)
     ax.text(X0 + 2.4, 1.85, 'feat(order): tạo đơn COD', fontsize=6.8, color=GREY)
@@ -97,7 +97,7 @@ def gitflow():
 
 def cicd():
     fig, ax = new(11, 3.0)
-    st = [('Push / Pull Request', 'GitHub', LIGHT), ('Build Backend', 'dotnet build', 'white'), ('Unit Test', 'xUnit + coverage', 'white'),
+    st = [('Push / Merge Request', 'GitLab', LIGHT), ('Build Backend', 'dotnet build', 'white'), ('Unit Test', 'xUnit + coverage', 'white'),
           ('Build Frontend', 'npm ci, lint, build', 'white'), ('Docker Build', 'image api, web', 'white'), ('Deploy Staging', 'chỉ nhánh develop', PINK)]
     w = 1.6
     for i, (a, b, fc) in enumerate(st):
@@ -105,7 +105,7 @@ def cicd():
         box(ax, x, 1.7, w, 0.95, f'{a}\n', fc=fc, ec=ORANGE if fc == PINK else TEAL, fs=8.3, bold=True, r=0.1)
         ax.text(x, 1.5, b, ha='center', fontsize=7.3, color=GREY)
         if i: arrow(ax, (x - 1.85 + w / 2, 1.7), (x - w / 2, 1.7))
-    ax.text(5.5, 0.6, 'Nếu một bước lỗi → pipeline đỏ, Pull Request không được merge (quy định trong DoD)', ha='center', fontsize=8, color=ORANGE)
+    ax.text(5.5, 0.6, 'Nếu một bước lỗi → pipeline đỏ, Merge Request không được merge (quy định trong DoD)', ha='center', fontsize=8, color=ORANGE)
     save(fig, 'cicd.png')
 
 

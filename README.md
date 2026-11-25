@@ -15,7 +15,7 @@ Khi chưa có khóa thật, hệ thống tự dùng bản giả lập (`FakeGhnC
 - **Backend:** ASP.NET Core 9 Web API, Entity Framework Core 9, SQL Server, JWT, BCrypt, Swagger
 - **Frontend:** React 19 + Vite, React Router
 - **Kiểm thử:** xUnit (32 unit test, SQLite in‑memory), script kiểm thử tích hợp `docs/cong-cu-tai-lieu/smoke.py`
-- **Triển khai:** Docker Compose (SQL Server + API + Nginx), GitHub Actions CI
+- **Triển khai:** Docker Compose (SQL Server + API + Nginx), GitLab CI/CD
 
 ## Cấu trúc thư mục
 
@@ -28,7 +28,8 @@ SweetMart/
 ├── database/schema.sql         # Script tạo CSDL (sinh từ migration)
 ├── docs/                       # Tài liệu Word, sơ đồ PNG, script sinh tài liệu và smoke test
 ├── docker-compose.yml
-└── .github/workflows/ci.yml
+├── .gitlab-ci.yml              # CI trên GitLab
+└── .github/workflows/ci.yml    # CI tương đương trên GitHub
 ```
 
 ## Chạy trên máy (môi trường phát triển)
@@ -110,12 +111,14 @@ docker compose up -d --build
 
 Mở http://localhost:8080 . Nginx phục vụ React và chuyển `/api/*` sang container API; API tự tạo CSDL trong container SQL Server.
 
-## CI (GitHub Actions)
+## CI (GitLab CI/CD)
 
-`.github/workflows/ci.yml` chạy khi push/PR vào `main`, `develop`, `feature/**`:
-1. **backend** – restore, build, chạy 32 unit test, lưu kết quả `.trx`
-2. **frontend** – `npm ci`, lint, build
-3. **docker** – build image API và Web (chỉ trên `main`/`develop`, sau khi 2 job trên đạt)
+Repo chính: https://gitlab.com/sweetmart-btl/SweetMart . `.gitlab-ci.yml` chạy khi push lên `main`, `develop`, `feature/**` và khi mở Merge Request:
+1. **backend** – image .NET SDK 9: restore, build, chạy 32 unit test, lưu kết quả `.trx` làm artifact
+2. **frontend** – image Node 22: `npm ci`, lint, build
+3. **docker** – Docker-in-Docker build image API và Web (chỉ trên `main`/`develop`, sau khi 2 job trên đạt)
+
+Bản sao trên GitHub (https://github.com/duy102230-ai/SweetMart) giữ file `.github/workflows/ci.yml` tương đương cho GitHub Actions.
 
 ## Các luồng nghiệp vụ chính
 

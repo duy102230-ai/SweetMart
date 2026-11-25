@@ -253,7 +253,7 @@ H(3, '2.3. Đánh giá tính khả thi (Feasibility Assessment)')
 BL(['**Khả thi về kỹ thuật (Technical): Cao.** Website được xây dựng bằng ReactJS, ASP.NET Core Web API và SQL Server – các công nghệ phổ biến, nhóm đã học. '
     'VNPay và GHN đều cung cấp môi trường thử nghiệm (sandbox) miễn phí, có tài liệu API rõ ràng. Phần rủi ro nhất (tích hợp) sẽ được kiểm chứng sớm bằng PoC.',
     '**Khả thi về vận hành (Operational): Cao.** Cửa hàng quy mô nhỏ, nhân viên đã quen dùng điện thoại, máy tính và mạng xã hội; giao diện quản trị đơn giản, có hướng dẫn sử dụng.',
-    '**Khả thi về kinh tế (Financial): Tốt.** Sử dụng công cụ miễn phí (GitHub, Docker, Visual Studio Code); chi phí chủ yếu là tên miền và máy chủ (khoảng 1–2 triệu đồng/năm). '
+    '**Khả thi về kinh tế (Financial): Tốt.** Sử dụng công cụ miễn phí (GitLab, Docker, Visual Studio Code); chi phí chủ yếu là tên miền và máy chủ (khoảng 1–2 triệu đồng/năm). '
     'Phí giao dịch VNPay chỉ phát sinh khi có doanh thu.',
     '**Khả thi về thời gian (Schedule): Đạt.** Dự án thực hiện trong 15 tuần theo Scrum: Sprint 0 (2 tuần), 5 Sprint × 2 tuần và 3 tuần hoàn thiện, bảo vệ.'])
 H(3, '2.4. Đánh giá rủi ro và biện pháp khắc phục')
@@ -263,10 +263,10 @@ T(['Mã', 'Rủi ro', 'Mức độ', 'Biện pháp khắc phục'],
    ['R03', 'Hai khách cùng mua sản phẩm chỉ còn ít hàng → bán vượt tồn kho', 'Cao', 'Trừ tồn kho trong transaction, khóa bản ghi lô hàng; kiểm thử đồng thời'],
    ['R04', 'Bán nhầm lô đã hết hạn', 'Cao', 'Xuất kho theo FEFO, loại lô hết hạn khỏi tồn khả dụng, cảnh báo cận date'],
    ['R05', 'Lộ thông tin khách hàng, mật khẩu, khóa bí mật tích hợp', 'Cao', 'Băm mật khẩu bcrypt, HTTPS, JWT; khóa bí mật lưu ở biến môi trường, không đưa lên Git'],
-   ['R06', 'Thành viên chưa vững công nghệ', 'Trung bình', 'Học trong Sprint 0, lập trình cặp, review code qua Pull Request'],
+   ['R06', 'Thành viên chưa vững công nghệ', 'Trung bình', 'Học trong Sprint 0, lập trình cặp, review code qua Merge Request'],
    ['R07', 'Phình phạm vi (thêm ví điện tử, tích điểm...)', 'Trung bình', 'Product Owner chốt MVP; yêu cầu mới đưa vào Backlog, xếp ưu tiên MoSCoW'],
    ['R08', 'Trễ tiến độ do lịch thi, môn học khác', 'Trung bình', 'Sprint 2 tuần, họp Daily Scrum, theo dõi Burndown; dự phòng 3 tuần cuối'],
-   ['R09', 'Xung đột mã nguồn, mất code', 'Thấp', 'GitHub, nhánh theo tính năng, Pull Request, CI'],
+   ['R09', 'Xung đột mã nguồn, mất code', 'Thấp', 'GitLab, nhánh theo tính năng, Merge Request, CI'],
    ['R10', 'Thiếu dữ liệu sản phẩm mẫu (ảnh, giá, hạn sử dụng)', 'Thấp', 'PO chuẩn bị 50–100 sản phẩm mẫu trong Sprint 1'],
    ['R11', 'Triển khai lên máy chủ lỗi sát ngày bảo vệ', 'Trung bình', 'Đóng gói Docker từ Sprint 2; triển khai thử mỗi Sprint'],
    ['R12', 'Email xác nhận rơi vào thư rác hoặc bị giới hạn gửi', 'Thấp', 'Dùng SMTP có xác thực, gửi bất đồng bộ; thông tin đơn vẫn xem được trên website']],
@@ -316,7 +316,7 @@ T(['Hạng mục', 'Nội dung'],
    ['Mô hình phát triển', 'Agile / Scrum, Sprint 2 tuần'],
    ['Thời gian', '15 tuần: Sprint 0 (tuần 1–2), Sprint 1–5 (tuần 3–12), bàn giao và bảo vệ (tuần 13–15)'],
    ['Nhóm dự án', 'Product Owner: [Thành viên 1] · Scrum Master: [Thành viên 2] · Developers: [Thành viên 3], [Thành viên 4], [Thành viên 5]'],
-   ['Công nghệ', 'ReactJS · ASP.NET Core Web API · SQL Server · Docker · GitHub'],
+   ['Công nghệ', 'ReactJS · ASP.NET Core Web API · SQL Server · Docker · GitLab'],
    ['Hệ thống tích hợp', 'VNPay (thanh toán), GHN (vận chuyển), SMTP (email)'],
    ['Mốc chính', 'Tuần 2: chốt Backlog, kiến trúc, ERD · Tuần 8: demo giữa kỳ (đặt hàng + VNPay) · Tuần 12: phát hành v1.0 · Tuần 15: bảo vệ'],
    ['Tiêu chí thành công', 'Toàn bộ User Story Must have đạt Definition of Done; kịch bản PoC đạt; UAT được Product Owner chấp nhận'],
